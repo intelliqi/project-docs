@@ -1,0 +1,51 @@
+Automated CI/CD Pipeline using Jenkins, Docker, GitHub and AWS
+
+i automated a cicd pipeline, at first i launched an ubuntu instance then connected to it to install jenkins after successful installation ,using public ip of the 
+instance opened jenkins using port number  on browser 
+now to automate jenkins using docker , jenkins needs access to docker for this i used a command 
+
+sudo usermod -aG docker $USER
+newgrp docker
+
+check : id + enter or groups + enter 
+after the access is completed go to github open settings click on webhooks , then add webhook give the payload url as
+
+http://<publicip>:8080/github-webhook/
+content type as : application/json
+
+now move to jenkins job configure page provide the github link in SCM at git repository and then go to triggers select github hook trigger for GItscm polling
+then move to buildsteps click on add buildstep 
+
+docker stop mycontainer | | true
+docker rm mycontainer | | true
+docker rmi mynginx
+
+docker build -t mynginx .
+docker run -d --name mycontainer -p 8080:80 mynginx
+
+i used these commands becoz docker stop, rm stops and deletes the containers that are already occupied with the name that i want to give nd rmi deletes the old images 
+and updates it with new one so that there is always a clearance and no junk more over due to this image updation the updated versions featuree etc will be available to
+the container ,docker build builds image from docker file which is located in github with the required instructions to be followed and after the image is build 
+docker run helps to create container with desired name port numbers etc..... and last but not least | | true makes the build successful even if the main command fails
+now press save and the build gets executed automatically when ever there is an updation or push into the github without any manual intervention jenkins collects
+the git repository data due to webhook and filters for the required one example dockerfile and index.html files and works according to the commands given
+in buildsteps automatically
+
+problems faced : when the instance is stopped and restarted the public ip changes so the webhook wont work it still triggers to old ip so whenever the 
+instance is restarted the public ip should be updated to webhook again 
+occupied port issues 
+sudden disconnection to jenkins
+
+simple flow : GitHub Push
+                   ↓
+            Webhook Trigger
+                   ↓
+            Jenkins Build
+                   ↓
+           Docker Image Build
+                   ↓
+          Container Deployment
+                   ↓
+             Website Updated
+
+
