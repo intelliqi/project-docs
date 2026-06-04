@@ -1,0 +1,10 @@
+nano configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: myconfig
+
+data:
+  app_message: "Hello from ConfigMap"
